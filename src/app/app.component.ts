@@ -32,7 +32,8 @@ export class AppComponent implements OnInit {
     }
   }
 
-  baseUrl: string = 'https://ndsmyter.be/local-guides-banner/banner.php?id=';
+  // baseUrl: string = 'https://ndsmyter.be/local-guides-banner/banner.php?id=';
+  baseUrl: string = 'http://localhost/local-guides-banner/banner.php?id=';
   private _url: string = '';
   id: string = '';
 
