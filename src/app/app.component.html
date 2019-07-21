@@ -1,0 +1,31 @@
+<div id="content">
+  <h1> Local Guides Banner Generator </h1>
+  <div class="input-form">
+    <p>
+      Copy and paste the URL to your Google Maps My Contributions page here.<br/>
+      Don't just "share" your profile, use the actual link if you are on your "My Contributions" page.
+    </p>
+    <mat-form-field class="input-full-width">
+      <input title="URL" matInput placeholder="URL (e.g. https://www.google.com/maps/contrib/100683510490650445783/)" [(ngModel)]="url">
+    </mat-form-field>
+
+    <table>
+      <tr>
+        <td>ID</td>
+        <td>{{id}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>Preview</h2>
+
+  <iframe *ngIf="bannerUrl" [src]="bannerUrl | safe"></iframe>
+
+  <h2>Use</h2>
+
+  <textarea *ngIf="iframeCode">
+    {{iframeCode}}
+  </textarea>
+</div>
+
+
