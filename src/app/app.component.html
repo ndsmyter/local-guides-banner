@@ -17,11 +17,20 @@
     </table>
   </div>
 
-  <h2>Preview</h2>
+  <h2>Image Preview</h2>
+
+  <img [src]="imageUrl" *ngIf="imageUrl">
+
+  <h2>HTML Preview</h2>
 
   <iframe *ngIf="bannerUrl" [src]="bannerUrl | safe"></iframe>
 
-  <h2>Use</h2>
+  <h2>Use Image</h2>
+  <textarea *ngIf="imageIframeCode">
+    {{imageIframeCode}}
+  </textarea>
+
+  <h2>Use HTML</h2>
 
   <textarea *ngIf="iframeCode">
     {{iframeCode}}

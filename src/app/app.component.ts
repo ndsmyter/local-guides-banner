@@ -26,29 +26,41 @@ export class AppComponent implements OnInit {
     const match = new RegExp('contrib/(\\d+)').exec(value);
     let newId = match && match[1] ? match[1] : null;
     if (this.id != newId) {
-      this.updateBanner(newId);
-      this.updateIframeCode(newId);
+      this.updateUrls(newId);
       this.id = newId;
     }
   }
 
-  // baseUrl: string = 'https://ndsmyter.be/local-guides-banner/banner.php?id=';
-  baseUrl: string = 'http://localhost/local-guides-banner/banner.php?id=';
   private _url: string = '';
   id: string = '';
 
   bannerUrl: string = '';
+  imageUrl: string = '';
   iframeCode: string = '';
+  imageIframeCode: string = '';
+
+  static getBannerUrl(id: string): string {
+    return AppComponent.getUrl('banner', id);
+  }
+
+  static getImageUrl(id: string): string {
+    return AppComponent.getUrl('image', id);
+  }
+
+  static getUrl(type: string, id: string): string {
+    return 'https://ndsmyter.be/local-guides-banner/' + type + '.php?id=' + id;
+  }
 
   ngOnInit(): void {
-    this.url = 'https://www.google.com/maps/contrib/100683510490650445783/edits/@50.9668175,3.4090764,9z/data=!3m1!4b1!4m3!8m2!3m1!1e1';
   }
 
-  updateBanner(id: string): void {
-    this.bannerUrl = this.baseUrl + id;
+  updateUrls(id: string): void {
+    const imageUrl = AppComponent.getImageUrl(id);
+    const bannerUrl = AppComponent.getBannerUrl(id);
+    this.bannerUrl = bannerUrl;
+    this.imageUrl = imageUrl;
+    this.iframeCode = '<iframe src="' + bannerUrl + '"></iframe>';
+    this.imageIframeCode = '<a href="https://www.google.com/maps/contrib/' + id + '"><img src="' + imageUrl + '" alt="Generated using https://ndsmyter.be/local-guides-banner/"></a>';
   }
 
-  updateIframeCode(id: string): void {
-    this.iframeCode = '<iframe src="' + this.baseUrl + id + '"></iframe>';
-  }
 }
