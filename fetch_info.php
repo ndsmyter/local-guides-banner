@@ -50,7 +50,8 @@ function get_code_value($code, $title = "") {
  * @param $id string the ID of the USEr
  */
 function calculate($id) {
-  global $contents, $name, $image, $level, $points, $values;
+  /** @noinspection PhpUnusedLocalVariableInspection */
+  global $contents, $name, $image, $level, $points, $values, $cached;
 
   $info_loaded = false;
   include("_load-cached.php");
