@@ -1,40 +1,35 @@
 <div id="content">
   <h1> Local Guides Banner Generator </h1>
   <div class="input-form">
-    <p>
-      Copy and paste the URL to your Google Maps My Contributions page here.<br/>
-      Don't just "share" your profile, use the actual link if you are on your "My Contributions" page.
-    </p>
     <mat-form-field class="input-full-width">
-      <input title="URL" matInput placeholder="URL (e.g. https://www.google.com/maps/contrib/100683510490650445783/)" [(ngModel)]="url">
+      <input title="URL" matInput placeholder="URL to 'Your Contributions' page" [(ngModel)]="url">
     </mat-form-field>
-
-    <table>
-      <tr>
-        <td>ID</td>
-        <td>{{id}}</td>
-      </tr>
-    </table>
   </div>
 
-  <h2>Image Preview</h2>
+  <div *ngIf="showPreview; else emptyView">
+    <h2>Preview</h2>
+    <div style="text-align: center">
+      <a [href]="profileUrl">
+        <img [src]="imageUrl" *ngIf="imageUrl" alt="Preview of generated banner">
+      </a>
+    </div>
 
-  <img [src]="imageUrl" *ngIf="imageUrl">
+    <h2><label for="image-text-content">Use</label></h2>
+    <textarea id="image-text-content" *ngIf="imageIframeCode">{{imageIframeCode}}</textarea>
 
-  <h2>HTML Preview</h2>
+  </div>
 
-  <iframe *ngIf="bannerUrl" [src]="bannerUrl | safe"></iframe>
-
-  <h2>Use Image</h2>
-  <textarea *ngIf="imageIframeCode">
-    {{imageIframeCode}}
-  </textarea>
-
-  <h2>Use HTML</h2>
-
-  <textarea *ngIf="iframeCode">
-    {{iframeCode}}
-  </textarea>
+  <ng-template #emptyView>
+    <p>Generate your own version of the banner, using only 3 easy steps:</p>
+    <ol>
+      <li>Navigate to your <a href="https://www.google.com/maps/contrib/" target="_blank">Your Contributions page on Google Maps</a> (make sure you're logged in)</li>
+      <li>You will be redirected to a page with a link resembling: https://www.google.com/maps/contrib/<strong>123456789012345678901</strong>/contribute/<br/>
+        which contains the 21-digit ID that is used to create the banner
+      </li>
+      <li>Copy and paste the whole link to the input field above</li>
+    </ol>
+    <p>Don't just "share" your profile, that will not have the same effect</p>
+  </ng-template>
 </div>
 
 

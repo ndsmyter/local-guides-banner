@@ -25,15 +25,16 @@ export class AppComponent implements OnInit {
     this._url = value;
     const match = new RegExp('contrib/(\\d+)').exec(value);
     let newId = match && match[1] ? match[1] : null;
-    if (this.id != newId) {
-      this.updateUrls(newId);
-      this.id = newId;
+    if (newId && this.id != newId) {
+      this.updateInfo(newId);
     }
   }
 
   private _url: string = '';
   id: string = '';
 
+  showPreview: boolean = false;
+  profileUrl: string = '';
   bannerUrl: string = '';
   imageUrl: string = '';
   iframeCode: string = '';
@@ -54,13 +55,16 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  updateUrls(id: string): void {
+  updateInfo(id: string): void {
     const imageUrl = AppComponent.getImageUrl(id);
     const bannerUrl = AppComponent.getBannerUrl(id);
+    this.id = id;
+    this.profileUrl = 'https://www.google.com/maps/contrib/' + id;
+    this.showPreview = true;
     this.bannerUrl = bannerUrl;
     this.imageUrl = imageUrl;
     this.iframeCode = '<iframe src="' + bannerUrl + '"></iframe>';
-    this.imageIframeCode = '<a href="https://www.google.com/maps/contrib/' + id + '"><img src="' + imageUrl + '" alt="Generated using https://ndsmyter.be/local-guides-banner/"></a>';
+    this.imageIframeCode = '<a href="' + this.profileUrl + '"><img src="' + imageUrl + '" alt="Generated using https://ndsmyter.be/local-guides-banner/"></a>';
   }
 
 }
