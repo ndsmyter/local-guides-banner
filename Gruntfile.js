@@ -80,7 +80,7 @@ module.exports = grunt => {
     size_report: {
       build: {
         files: {
-          list: ['dist/*.chunk.js', 'dist/*.bundle.js']
+          list: ['dist/*.js', 'dist/*.chunk.js', 'dist/*.bundle.js']
         }
       }
     },
