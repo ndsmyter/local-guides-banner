@@ -28,6 +28,7 @@ function ends_with($haystack, $needle) {
 function simple_match($pattern) {
   global $contents;
   preg_match_all($pattern, $contents, $matches, PREG_PATTERN_ORDER);
+  error_log(print_r($matches, true));
 
   return count($matches) > 0 ? $matches[1][0] : "";
 }
@@ -55,21 +56,23 @@ function calculate($id) {
 
   $info_loaded = false;
   include("_load-cached.php");
-  if ($info_loaded) {
-    error_log('Using the database information');
+    if ($info_loaded) {
+      error_log('Using the database information');
 
-    return;
-  }
+      return;
+    }
 
   error_log('Manual loading of the information');
 
   $contents = file_get_contents("https://www.google.com/maps/contrib/$id");
 
+  error_log($contents);
+
   // Filter out the ampersand of Q&A \\u0026
   $contents = str_replace("\\\\u0026", "&", $contents);
 
   $name = simple_match("/<meta content=\"Contributions by ([^\"]*)\" itemprop=\"name\">/");
-  $image = simple_match("/\[\[\[\\\\\"" . $name . "\\\\\"\]\\\\n,\\\\\"\/\/maps.google.com\/maps\/contrib\/" . $id . "\/photos\\\\\",\\\\\"([^\\\]+)\\\\\"/");
+  $image = simple_match("/\[\\\\\"" . $name . "\\\\\",\[null,4,null,null,null,null,\[\\\\\"([^\\\\\"]*)\\\\\"\]/");
 
   $pattern = "/<meta content=\"Level (\d+) Local Guide | ([\d,]+) Points\" itemprop=\"description\">/";
   preg_match_all($pattern, $contents, $matches, PREG_PATTERN_ORDER);

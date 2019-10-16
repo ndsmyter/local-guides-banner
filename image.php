@@ -14,7 +14,8 @@ function load_image($img_url) {
   if (ends_with($image_url, ".png")) {
     $im = imagecreatefrompng($image_url);
   } else if (ends_with($image_url, ".jpg")) {
-    $im = imagecreatefromjpeg($image_url);
+    $im = imagecreatefrompng($image_url);
+//    $im = imagecreatefromjpeg($image_url);
   } else {
     error_log("Type not supported: " . $image_url);
   }

@@ -27,6 +27,7 @@
   .local-guides-banner-image {
     float: left;
     margin: 15px 10px 5px 10px;
+    max-width: 95px;
   }
 
   .local-guides-banner-name {
