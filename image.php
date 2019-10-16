@@ -11,13 +11,16 @@ function load_image($img_url) {
   }
 
   $im = null;
-  if (ends_with($image_url, ".png")) {
-    $im = imagecreatefrompng($image_url);
-  } else if (ends_with($image_url, ".jpg")) {
-    $im = imagecreatefrompng($image_url);
-//    $im = imagecreatefromjpeg($image_url);
-  } else {
-    error_log("Type not supported: " . $image_url);
+  $file_dimensions = getimagesize($image_url);
+  switch (strtolower(strtolower($file_dimensions['mime']))) {
+    case 'image/png':
+      $im = imagecreatefrompng($image_url);
+      break;
+    case 'image/jpeg':
+      $im = imagecreatefromjpeg($image_url);
+      break;
+    default:
+      error_log("Type not supported: " . $image_url);
   }
   if (!$im) {
     error_log("Image couldn't be created: " . $image_url);

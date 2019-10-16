@@ -28,7 +28,6 @@ function ends_with($haystack, $needle) {
 function simple_match($pattern) {
   global $contents;
   preg_match_all($pattern, $contents, $matches, PREG_PATTERN_ORDER);
-  error_log(print_r($matches, true));
 
   return count($matches) > 0 ? $matches[1][0] : "";
 }
