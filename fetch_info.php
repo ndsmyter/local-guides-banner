@@ -34,7 +34,7 @@ function simple_match($pattern) {
 
 function get_code_value($code, $title = "") {
   global $contents, $name;
-  preg_match_all("/\[" . $code . ",null,null,\d+,null,null,\\\\\"[^\\\]+\\\\\",(\d+),\\\\\"([^\\\]+)\\\\\",\d+\]/", $contents, $matches, PREG_PATTERN_ORDER);
+  preg_match_all("/\[" . $code . ",null,null,\d+,null,null,\\\\\"[^\\\]+\\\\\",(\d+),\\\\\"([^\\\]+)\\\\\",\d+,\\\\\"[^\\\]+\\\\\"\]/", $contents, $matches, PREG_PATTERN_ORDER);
   if (count($matches) > 0) {
     return array(
       "value" => $matches[1][0],
@@ -47,7 +47,7 @@ function get_code_value($code, $title = "") {
 }
 
 /**
- * @param $id string the ID of the USEr
+ * @param $id string the ID of the User
  */
 function calculate($id) {
   /** @noinspection PhpUnusedLocalVariableInspection */
@@ -55,11 +55,11 @@ function calculate($id) {
 
   $info_loaded = false;
   include("_load-cached.php");
-    if ($info_loaded) {
-      error_log('Using the database information');
+  if ($info_loaded) {
+    error_log('Using the database information');
 
-      return;
-    }
+    return;
+  }
 
   error_log('Manual loading of the information');
 
