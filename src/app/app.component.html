@@ -17,7 +17,7 @@
     <h2><label for="image-text-content">Use</label></h2>
     <textarea id="image-text-content" *ngIf="imageIframeCode">{{imageIframeCode}}</textarea>
 
-    <ng-adsense [adClient]="'ca-pub-8927382453106522'" [adFormat]="'fluit'" [adSlot]="9915477379" [display]="'inline-block'" [width]="320" [height]="108"></ng-adsense>
+    <ng-adsense adClient="ca-pub-8927382453106522" adFormat="fluid" [adSlot]="9915477379" display="inline-block" [width]="320" [height]="108"></ng-adsense>
 
     <h2>Use on Local Guides Connect</h2>
     <p>
@@ -36,6 +36,8 @@
       If you now generate a new comment, you can see the banner in the preview of your message.
       And of course also after you've saved the comment and go back to the comment.
     </p>
+
+    <app-options-table></app-options-table>
   </div>
 
   <ng-template #emptyView>
@@ -49,8 +51,10 @@
     </ol>
     <p>Don't just "share" your profile, that will not have the same effect</p>
 
-    <ng-adsense [adClient]="'ca-pub-8927382453106522'" [adSlot]="9915477379" [adFormat]="'fluid'" [layout]="'in-article'" [display]="'inline-block'" [width]="400" [height]="200"
+    <ng-adsense adClient="ca-pub-8927382453106522" [adSlot]="9915477379" adFormat="fluid" layout="in-article" display="inline-block" [width]="400" [height]="200"
                 [fullWidthResponsive]="true"></ng-adsense>
+
+    <app-options-table></app-options-table>
   </ng-template>
 </div>
 
