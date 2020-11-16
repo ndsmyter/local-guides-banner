@@ -1,4 +1,15 @@
-<?php /** @noinspection HtmlUnknownAttribute */
+<?php /*
+ * image.php
+ *
+ * @author Nicolas De Smyter <nicolasdesmyter@gmail.com>
+ * @package local-guides-banner
+ * @copyright 2019 Nicolas De Smyter
+ * @license https://www.gnu.org/licenses/gpl-3.0.en.html GNU GENERAL PUBLIC LICENSE Version 3
+ * @version 1.0.0
+ * @link https://ndsmyter.be
+ * @since 16/11/20, 21:48
+ */
+/** @noinspection HtmlUnknownAttribute */
 
 include("fetch_info.php");
 
