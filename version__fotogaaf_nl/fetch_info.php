@@ -10,6 +10,7 @@ $options = array();
 
 function save_to_file($values) {
   file_put_contents("previous.json", json_encode($values));
+  file_put_contents("data.json", json_encode(["views" => $values["photo_views"]["value"], "photos" => $values["photos"]["value"], "points" => $values["points"]]));
 }
 
 function load_from_file() {

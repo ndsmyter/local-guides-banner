@@ -50,60 +50,21 @@ function add_image($canvas, $icon_url, $left_margin_text, $icon_start) {
   imagedestroy($icon);
 }
 
-function add_row($canvas, array $values, array $fields, $i, $icon_start, $text_start) {
-  global $left_margin_text, $normal_text_size, $left_margin_icon_text, $fg_color, $normal_text_font, $column2_text, $column2_text_left;
-  add_image($canvas, $values[$fields[$i]]["icon"], $left_margin_text, $icon_start);
-  imagettftext($canvas, $normal_text_size, 0, $left_margin_icon_text, $text_start, $fg_color, $normal_text_font, "" . number_format($values[$fields[$i]]["value"]));
-  $i++;
-  add_image($canvas, $values[$fields[$i]]["icon"], $column2_text, $icon_start);
-  imagettftext($canvas, $normal_text_size, 0, $column2_text_left, $text_start, $fg_color, $normal_text_font, "" . number_format($values[$fields[$i]]["value"]));
-  $i++;
-
-  return $i;
-}
-
 // Default values
 $background_color = [241, 163, 64];
 $foreground_color = [0, 0, 0];
-$sizes = [
-  [
-    "margin"               => 10, // pixels
-    "column"               => 100,// pixels
-    "title"                => 15, // pixels
-    "subtitle"             => 12, // pixels
-    "text"                 => 10, // pixels
-    "avatar"               => 1,  // percentage
-    "icon"                 => 1,  // percentage
-    "icon_bg_diam"         => 25, // pixels
-    "icon_bg_margin_right" => 10, // pixels
-    "icon_bg_correction"   => 1,  // pixels
-  ],
-  [
-    "margin"               => 9,
-    "column"               => 90,
-    "title"                => 12,
-    "subtitle"             => 10,
-    "text"                 => 9,
-    "avatar"               => 0.8,
-    "icon"                 => 0.9,
-    "icon_bg_diam"         => 22,
-    "icon_bg_margin_right" => 9,
-    "icon_bg_correction"   => 0,
-  ],
-  [
-    "margin"               => 7,
-    "column"               => 80,
-    "title"                => 9,
-    "subtitle"             => 8,
-    "text"                 => 8,
-    "avatar"               => 0.6,
-    "icon"                 => 0.7,
-    "icon_bg_diam"         => 16,
-    "icon_bg_margin_right" => 7,
-    "icon_bg_correction"   => 0
-  ]
+$size = [
+  "margin"               => 10, // pixels
+  "column"               => 100,// pixels
+  "title"                => 15, // pixels
+  "subtitle"             => 12, // pixels
+  "text"                 => 10, // pixels
+  "avatar"               => 1,  // percentage
+  "icon"                 => 1,  // percentage
+  "icon_bg_diam"         => 25, // pixels
+  "icon_bg_margin_right" => 10, // pixels
+  "icon_bg_correction"   => 1,  // pixels
 ];
-$size = $sizes[0];
 
 // Inputs
 if (isset($_GET["bg"])) {
@@ -114,16 +75,15 @@ if (isset($_GET["fg"])) {
   list($r, $g, $b) = sscanf($_GET["fg"], "%02x%02x%02x");
   $foreground_color = [$r, $g, $b];
 }
-if (isset($_GET["s"])) {
-  $s = intval($_GET["s"]);
-  if (!is_null($s) && $s > 0 && $s < count($sizes)) {
-    $size = $sizes[$s];
-  }
-}
 
 header('Content-Type: image/jpeg');
 
 // Avatar Information
+$image = $values["avatar"];
+$name = $values["name"];
+$points = $values["points"];
+$level = $values["level"];
+$fields = ["photos", "photo_views"];
 $avatar = load_image($image);
 $original_avatar_width = imagesx($avatar);
 $original_avatar_height = imagesy($avatar);
@@ -139,7 +99,7 @@ $normal_text_size = $size["text"];
 // Title Information
 $title = "Contributions by " . $name;
 $title_width_array = imagettfbbox($title_size, 0, $title_font, $title);
-$title_width = $title_width_array[2] - $title_width_array[1];
+$title_width = $title_width_array[2] - $title_width_array[1] + 20;
 
 $margin = $size["margin"];
 $column_width = $size["column"];
@@ -179,27 +139,15 @@ $column2_text_left = $column2_text + $icon_margin_right;
 $circle_radius = $circle_diameter / 2;
 
 // Background for icons
-imagefilledellipse($canvas, $circle_left, $circle_top, $circle_diameter, $circle_diameter, $circle_color);
-imagefilledellipse($canvas, $circle_left, $circle_top + 40, $circle_diameter, $circle_diameter, $circle_color);
-imagefilledellipse($canvas, $circle_left + $column_width, $circle_top, $circle_diameter, $circle_diameter, $circle_color);
-imagefilledellipse($canvas, $circle_left + $column_width, $circle_top + 40, $circle_diameter, $circle_diameter, $circle_color);
-imagefilledrectangle($canvas, $circle_left - $circle_radius + $size["icon_bg_correction"], $circle_top, $circle_left + $circle_radius, $circle_top + 40, $circle_color);
-imagefilledrectangle($canvas, $circle_left + $column_width - $circle_radius + $size["icon_bg_correction"], $circle_top, $circle_left + $column_width + $circle_radius, $circle_top + 40, $circle_color);
+imagefilledellipse($canvas, $circle_left + 5, $circle_top + 10, $circle_diameter, $circle_diameter, $circle_color);
+imagefilledellipse($canvas, $circle_left + 5, $circle_top + 50, $circle_diameter, $circle_diameter, $circle_color);
 
-// Values - Row 0
-$i = add_row($canvas, $values, $fields, 0, $icon_start, $text_start);
-$text_start += $next_line;
-$icon_start += $next_line;
+add_image($canvas, $values["photos"]["icon"], $left_margin_text + 5, $icon_start + 10);
+imagettftext($canvas, 20, 0, $left_margin_icon_text, $text_start + 15, $fg_color, $normal_text_font, "" . number_format($values["photos"]["value"]));
+add_image($canvas, $values["photo_views"]["icon"], $left_margin_text + 5, $icon_start + 50);
+imagettftext($canvas, 20, 0, $left_margin_icon_text, $text_start + 55, $fg_color, $normal_text_font, "" . number_format($values["photo_views"]["value"]));
 
-// Values - Row 1
-$i = add_row($canvas, $values, $fields, $i, $icon_start, $text_start);
-$text_start += $next_line;
-$icon_start += $next_line;
-
-// Values - Row 2
-add_row($canvas, $values, $fields, $i, $icon_start, $text_start);
-
-imagefttext($canvas, 10, 0, $width - 100, $height - 6, $fg_color, $normal_text_font, "© ndsmyter.be");
+imagefttext($canvas, 8, 0, $width - 75, $height - 6, $fg_color, $normal_text_font, "© ndsmyter.be");
 
 // Create a jpeg
 imagejpeg($canvas, null, 99);
