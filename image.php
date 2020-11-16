@@ -199,6 +199,8 @@ $icon_start += $next_line;
 // Values - Row 2
 add_row($canvas, $values, $fields, $i, $icon_start, $text_start);
 
+imagefttext($canvas, 10, 0, $width - 100, $height - 6, $fg_color, $normal_text_font, "© ndsmyter.be");
+
 // Create a jpeg
 imagejpeg($canvas, null, 99);
 imagedestroy($canvas);
