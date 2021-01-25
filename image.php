@@ -140,6 +140,11 @@ header('Content-Type: image/jpeg');
 $avatar = load_image($image);
 $original_avatar_width = imagesx($avatar);
 $original_avatar_height = imagesy($avatar);
+if ($original_avatar_width < 30) {
+  $avatar = null;
+  $original_avatar_height = 120;
+  $original_avatar_width = 120;
+}
 $avatar_width = $original_avatar_width * $size["avatar"];
 $avatar_height = $original_avatar_height * $size["avatar"];
 // Fonts
@@ -168,8 +173,10 @@ $bg_rectangle = imagefilledrectangle($canvas, 0, 0, $width, $height, $bg_color);
 
 // Avatar
 //imagecopy($canvas, $avatar, $margin, $margin, 0, 0, $avatar_width, $avatar_height);
-imagecopyresized($canvas, $avatar, $margin, $margin, 0, 0, $avatar_width, $avatar_height, $original_avatar_width, $original_avatar_height);
-imagedestroy($avatar);
+if (!is_null($avatar)) {
+  imagecopyresized($canvas, $avatar, $margin, $margin, 0, 0, $avatar_width, $avatar_height, $original_avatar_width, $original_avatar_height);
+  imagedestroy($avatar);
+}
 
 // Title + Subtitle
 $text_start = $title_size;

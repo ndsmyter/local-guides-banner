@@ -22,6 +22,8 @@ $image = "";
 $values = [];
 $options = array();
 
+$debug = false;
+
 if ($id == "" || is_nan($id) || $id == "null" || is_null($id)) {
   die("No ID reference provided");
 }
@@ -43,16 +45,17 @@ function simple_match($pattern) {
   global $contents;
   preg_match_all($pattern, $contents, $matches, PREG_PATTERN_ORDER);
 
+  error_log(print_r($matches, true));
   return count($matches) > 0 ? $matches[1][0] : "";
 }
 
 function get_code_value($code, $title = "") {
   global $contents, $name;
-  preg_match_all("/\[" . $code . ",null,null,\d+,null,null,\\\\\"[^\\\]+\\\\\",(\d+),\\\\\"([^\\\]+)\\\\\",\d+,\\\\\"[^\\\]+\\\\\"\]/", $contents, $matches, PREG_PATTERN_ORDER);
+  preg_match_all("/\[" . $code . ",[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,\\\\\"([^\\\]+)\\\\\",(\d+),[^,]*\]/", $contents, $matches, PREG_PATTERN_ORDER);
   if (count($matches) > 0) {
     return array(
-      "value" => $matches[1][0],
-      "icon"  => $matches[2][0],
+      "value" => $matches[2][0],
+      "icon"  => $matches[1][0],
       "title" => "Number of " . $title . " by " . $name
     );
   } else {
@@ -65,11 +68,11 @@ function get_code_value($code, $title = "") {
  */
 function calculate($id) {
   /** @noinspection PhpUnusedLocalVariableInspection */
-  global $contents, $name, $image, $level, $points, $values, $cached;
+  global $contents, $name, $image, $level, $points, $values, $cached, $debug;
 
   $info_loaded = false;
   include("_load-cached.php");
-  if ($info_loaded) {
+  if (!$debug && $info_loaded) {
     error_log('Using the database information');
 
     return;
@@ -79,13 +82,19 @@ function calculate($id) {
 
   $contents = file_get_contents("https://www.google.com/maps/contrib/$id");
 
-  error_log($contents);
+  if ($debug) {
+    error_log($contents);
+  }
 
   // Filter out the ampersand of Q&A \\u0026
   $contents = str_replace("\\\\u0026", "&", $contents);
 
   $name = simple_match("/<meta content=\"Contributions by ([^\"]*)\" itemprop=\"name\">/");
   $image = simple_match("/\[\\\\\"" . $name . "\\\\\",\[null,4,null,null,null,null,\[\\\\\"([^\\\\\"]*)\\\\\"\]/");
+
+  if ($debug) {
+    error_log("Image: " . $image);
+  }
 
   $pattern = "/<meta content=\"Level (\d+) Local Guide | ([\d,]+) Points\" itemprop=\"description\">/";
   preg_match_all($pattern, $contents, $matches, PREG_PATTERN_ORDER);
